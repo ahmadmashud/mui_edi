@@ -7,7 +7,7 @@ $tgl=date('Y-m-d');
 if (isset($_GET['username']) AND ($_GET['supplier_name'])) 
 {
 	$username			= $_GET['username'];
-	$supplier			= $_GET['supplier_name'];
+	$supplier			= $_GET['supplier_name'] ?? "";
 }
 	else
 {
