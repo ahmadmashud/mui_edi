@@ -1,0 +1,265 @@
+<?php
+error_reporting(0); 
+session_start();
+date_default_timezone_set("Asia/Jakarta");
+$jam=date('d/m/Y h:i:s');
+$tgl= date("Y-m-d");
+$jamm= date("H:i:s");
+
+if(!isset($_SESSION['username'])){
+    die("<script>alert('<b>Oops!</b> Access Failed.
+		<p>System Logout. You must login again.</p>')</script>
+		<script> onclick=location.href='../../index.php'</script>");
+}
+if($_SESSION['account_status']!="Administrator"){
+    die("<script>alert('<b>Oops!</b> Access Failed.
+		<p>You are not Administrator.</p>')</script>
+		<script> onclick=location.href='../../index.php''</script>");
+}
+
+$timeout = 60;
+$logout_redirect_url = "../../index.php"; 
+ 
+$timeout = $timeout * 60; 
+if (isset($_SESSION['start_time'])) {
+    $elapsed_time = time() - $_SESSION['start_time'];
+    if ($elapsed_time >= $timeout) {
+        session_destroy();
+        echo "<script>alert('This session has timeout!'); window.location = '$logout_redirect_url'</script>";
+    }
+}
+$_SESSION['start_time'] = time();
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MUI-Electronic Data Interchange</title>
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+  <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+  <link href="../../plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="../../dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+  <link href="../../dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="skin-blue">
+  <div class="wrapper">
+  <header class="main-header">
+  <a href="#" class="logo" style="font-family:calibri; size:30px;"><i><b>MUI-</b>EDI</i></a>
+  <nav class="navbar navbar-static-top" role="navigation">
+  <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  </a>
+  <div class="navbar-custom-menu">
+  <ul class="nav navbar-nav">
+  <li class="dropdown user user-menu">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+  <img src="../../dist/img/user.jpg" class="user-image" alt="User Image"/>
+  <span class="hidden-xs"><?php echo $_SESSION['full_name']?></span>
+  </a>
+  <ul class="dropdown-menu">
+  <li class="user-header">
+  <img src="../../dist/img/user.jpg" class="img-circle" alt="User Image" />
+  <p> Welcome, <?php echo $_SESSION['full_name']?><br><?php echo $_SESSION['supplier']?> </p>
+  </li>  
+  <li class="user-footer">
+  <div class="pull-right">
+  <a href="../login/act-logout.php?username=<?=$_SESSION['username'];?>&supplier=<?=$_SESSION['supplier'];?>" class="btn btn-default btn-flat">Logout</a>
+  </div>
+  </li>
+  </ul>
+  </li>
+  </ul>
+  </div>
+  </nav>
+  </header>
+
+  <aside class="main-sidebar">
+  <section class="sidebar">
+  <ul class="sidebar-menu">
+  <li class="header">MAIN NAVIGATION</li>
+	<li class="active treeview">
+		<a href="../../home_admin.php">
+	  <i class="fa fa-home"></i> <span>Home</span> 
+		</a>
+	</li>
+	<li>
+		<a href="po_product.php">
+	  <i class="fa fa-file-text"></i> <span>Purchase Order</span> 
+		</a>
+	</li>
+	<li>
+		<a href="sds_product.php">
+	  <i class="fa fa-edit"></i> <span>Supplier Delivery Schedule</span> 
+		</a>
+	</li>
+  <li class="treeview">
+	<a href="#">
+	  <i class="fa fa-cubes"></i>
+	  <span>Inventory</span>
+	  <i class="fa fa-angle-left pull-right"></i>
+	</a>
+	<ul class="treeview-menu">
+	  <li><a href="do_product.php"><i class="fa fa-truck"></i> Delivery Order</a></li>
+	  <li><a href="replacement_product.php"><i class="fa fa-refresh"></i> Replacement</a></li>
+	</ul>
+  </li>
+	<li>
+	<a href="qc_product.php">
+	<i class="fa fa-check-square-o"></i> <span>Quality Check</span>
+	</a>
+	</li>
+	<li>
+	<a href="summary_product.php">
+	<i class="fa fa-calculator"></i> <span>Summary</span> 
+	</a>
+	</li>
+  <li class="treeview">
+	<a href="#">
+	  <i class="fa fa-file-image-o"></i>
+	  <span>GTF</span>
+	  <i class="fa fa-angle-left pull-right"></i>
+	</a>
+	<ul class="treeview-menu">
+	  <li><a href="drawing.php"><i class="fa fa-upload"></i>Upload Drawing</a></li>
+	  <li><a href="drawing2.php"><i class="fa fa-download"></i>Download Drawing</a></li>
+	</ul>
+  </li>
+	<li>
+    <a href="transaction_history.php">
+    <i class="fa fa-history"></i> <span>Transaction History</span> 
+    </a>
+    </li>
+	<li>
+    <a href="user_information.php">
+    <i class="fa fa-user"></i> <span>User Information</span> 
+    </a>
+    </li>
+  </ul>
+  </section>
+  </aside>
+
+  <div class="content-wrapper">
+  <section class="content-header">
+  <h1> &nbsp </h1>
+  <ol class="breadcrumb">
+  <li><a href="../../home_admin.php"><i class="fa fa-dashboard"></i>Home</a></li>
+  <li class="active">Drawing</li>
+  </ol>
+  </section>
+  <section class="content">
+  <div class="row">
+  <div class="col-xs-12">
+  <div class="box">              	
+  <div class="box-header">
+	<h3 class="box-title"><b>Download Drawing</b></h3>
+  </div><!-- /.box-header -->
+  <div class="box-body">
+  <table id="example1" class="table table-bordered table-striped">
+  <thead>
+  <tr>
+  <th width="30">No.</th>
+  <th width="80">Upload Date</th>
+  <th>File Name</th>
+  <th width="100">Document Type</th>
+  <th width="100">Document Size</th>
+  </tr>
+  </thead>
+  <tbody>
+                <?php
+				include('config.php');
+				$sql = mysqli_query($conn,"SELECT * FROM tb_drawing ORDER BY document_id DESC");
+				if(mysqli_num_rows($sql) > 0){
+					$no = 1;
+					while($data = mysqli_fetch_assoc($sql)){						
+						?>
+						
+						<tr bgcolor="#fff">
+							<?php $data['document_id']; ?>
+							<td align="center"><?php echo $no; ?></td>
+							<td align="center"><?php echo $data['upload_date']; ?> </td>			
+							<?php	echo '<td><a href="../../'.$data['file'].'">'.$data['document_name'].'</a></td>'; ?>
+							<td align="center"><?php echo $data['document_type'];?></td>
+							<td align="center"><?php echo formatBytes($data['document_size']); ?></td>
+							<?php
+						$update_drawing = "UPDATE tb_drawing SET downloader = '$_SESSION[full_name]', download_date = '$tgl', download_time = '$jamm' 
+						WHERE document_id = '$data[document_id];'";		
+						$query_update_drawing = mysqli_query($conn,$update_drawing);					
+						
+						$select_dr = "SELECT * FROM tb_drawing WHERE document_id = '".$data['document_id']."'";
+						$query_select_dr = mysqli_query ($conn, $select_dr);
+						$data_count = mysqli_num_rows($query_select_dr);		
+						$download_seq = $data['download_seq'];
+						
+						for($i=0;$i<$data_count;$i++)
+						{	
+						$download_seq = $download_seq + 1;
+						} 
+
+						$update_download_seq = "UPDATE tb_drawing SET download_seq = '$download_seq' WHERE document_id = '$data[document_id];'";		
+						$query_update_download_seq = mysqli_query($conn,$update_download_seq);	
+						
+						$menu_dr = 'Download Drawing';
+						$insert_dr = "INSERT INTO tb_activity_log (date_time, username, supplier, account_status, menu, activity_description) VALUES ('$jam', '$_SESSION[username]', '$_SESSION[supplier]', '$_SESSION[account_status]', '$menu_dr', 'Download Data -> id: ".$data['document_id'].", Name : ".$data['document_name'].", Number: ".$data['document_number']."')";
+						$query_insert_dr = mysqli_query ($conn, $insert_dr);
+						?>
+						</tr>
+						<?php
+						$no++;
+					}
+				}else{
+					echo '
+					<tr bgcolor="#fff">
+						<td align="center" colspan="5" align="center">No data to display.</td>
+					</tr>
+					';
+				}
+
+				?>
+  </tr>
+  </tbody>
+  </table>
+  </div>
+  </div>
+  </div>
+  </div>
+  </section>
+  </div>
+	  
+  <footer class="main-footer">
+  <div class="pull-right hidden-xs">      
+  </div>
+	Version 1.0. Copyright &copy; 2017 MUI Information Technology Department. All rights reserved
+  </footer>
+  </div>
+	  
+  <script src="../../plugins/jQuery/jQuery-2.1.3.min.js"></script>
+  <script src="../../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../../plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
+  <script src="../../plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+  <script src="../../plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+  <script src='../../plugins/fastclick/fastclick.min.js'></script>
+  <script src="../../dist/js/app.min.js" type="text/javascript"></script>
+  <script src="../../dist/js/demo.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  $(function () {
+  $("#example1").dataTable();
+  $('#example2').dataTable({
+  "bPaginate": true,
+  "bLengthChange": false,
+  "bFilter": false,
+  "bSort": true,
+  "bInfo": true,
+  "bAutoWidth": false
+  });
+  });
+  </script>
+</body>
+</html>

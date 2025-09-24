@@ -1,0 +1,1 @@
+<input type="button" onclick="alert('Something')" value="Message" /><input type="button" onclick="alert('Something else')" value="Message 2"
