@@ -4,7 +4,7 @@ date_default_timezone_set("Asia/Jakarta");
 $jam=date('d/m/Y H:i:s');
 $tgl=date('Y-m-d');
 
-if (isset($_GET['username']) AND ($_GET['supplier_name'])) 
+if (isset(@$_GET['username']) AND ($_GET['supplier_name'])) 
 {
 	$username			= $_GET['username'];
 	$supplier			= $_GET['supplier_name'] ?? "";
