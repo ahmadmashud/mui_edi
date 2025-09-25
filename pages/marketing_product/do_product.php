@@ -216,7 +216,8 @@ if (!file_exists($tempdir))
 		</Script>
 	</head>
 	
-	<body onLoad="document.postform.elements['do_number'].focus();" class="skin-blue">
+	<!-- <body onLoad="document.postform.elements['do_number'].focus();" class="skin-blue"> -->
+	<body  class="skin-blue">
 		<div class="wrapper">
 			<header class="main-header">
 				<a href="#" class="logo" style="font-family:calibri; size:30px;"><i><b>MUI-</b>EDI</i></a>
@@ -309,8 +310,38 @@ if (!file_exists($tempdir))
 									<h3 class="box-title"><b>Delivery Order</b></h3>
 								</div>
 
-								<div class="box-body">									
-									<form action="do_process_product.php" method="post" name='autoSumForm' enctype="multipart/form-data">
+								<div class="box-body">	
+									
+								
+								<?php		  			  
+								if(isset($_REQUEST['keyword2']) && $_REQUEST['keyword2']<>"")
+								{
+									$keyword2=$_REQUEST['keyword2'];
+									$reload = "do_product.php?pagination=true&keyword2=$keyword2";
+									$sql =  "SELECT * FROM tb_supplier_delivery_schedule_details WHERE do_number LIKE '%$keyword2%' and supplier_name='$_SESSION[supplier]' ORDER BY sdo_date DESC";
+									$result = mysqli_query($conn,$sql);
+								}
+									else
+								{
+									$reload = "do_product.php?pagination=true";
+									$sql =  "SELECT * FROM tb_supplier_delivery_schedule_details where supplier_name='$_SESSION[supplier]' ORDER BY sds_date DESC";
+									$result = mysqli_query($conn,$sql);
+							
+								}
+								?>
+									
+
+								<form method="post" action="do_product.php">
+									<table border=0 align="right">
+										<tr>
+											<td>
+												<input type="text" id="myInput2" name="keyword2" placeholder="Search Item Name..." value="<?php echo @$_REQUEST['keyword2']; ?>">
+											</td>
+										</tr>
+									</table>
+								</form>
+																
+							<form action="do_process_product.php" method="post" name='autoSumForm' enctype="multipart/form-data">
 									<?php						
 									error_reporting(0);
 									$query = "SELECT * FROM tb_supplier_delivery_schedule WHERE shipment_status!='COMPLETELY RECEIVED' and supplier_name='$_SESSION[supplier]'";
@@ -340,35 +371,6 @@ if (!file_exists($tempdir))
 									$rows = mysqli_fetch_assoc($show1);		
 																			  
 									?>		
-								
-								<?php		  			  
-								if(isset($_REQUEST['keyword2']) && $_REQUEST['keyword2']<>"")
-								{
-									$keyword2=$_REQUEST['keyword2'];
-									$reload = "do_product.php?pagination=true&keyword2=$keyword2";
-									$sql =  "SELECT * FROM tb_supplier_delivery_schedule_details WHERE do_number LIKE '%$keyword2%' and supplier_name='$_SESSION[supplier]' ORDER BY sdo_date DESC";
-									$result = mysqli_query($conn,$sql);
-								}
-									else
-								{
-									$reload = "do_product.php?pagination=true";
-									$sql =  "SELECT * FROM tb_supplier_delivery_schedule_details where supplier_name='$_SESSION[supplier]' ORDER BY sds_date DESC";
-									$result = mysqli_query($conn,$sql);
-							
-								}
-								?>
-
-								<form method="post" action="do_product.php">
-									<table border=0 align="right">
-										<tr>
-											<td>
-												<input type="text" id="myInput2" name="keyword2" placeholder="Search Item Name..." value="<?php echo $_REQUEST['keyword2']; ?>">
-											</td>
-										</tr>
-									</table>
-								</form>
-								
-									
 
 								<table id="example1" class="table table-bordered table-striped">
 									<tr>
@@ -399,6 +401,8 @@ if (!file_exists($tempdir))
 										$inventory_unit		=$rows['inventory_unit'];
 										$department			=$rows['department'];
 										$query = "SELECT * FROM tb_supplier_delivery_schedule_details where po_number = '$po_number' and sds_number='$sds_number' and supplier_name='$_SESSION[supplier]' ORDER BY sds_number";
+									
+										
 										$tampilPeg=mysqli_query($conn,"SELECT * FROM tb_supplier_delivery_schedule_details where po_number = '$po_number' and sds_number='$sds_number' and supplier_name='$_SESSION[supplier]' ORDER BY sds_number");
 									
 										$no = 1;	
@@ -623,7 +627,7 @@ if (!file_exists($tempdir))
 											}
 											$menu_do = 'Delivery Order';
 											$insert_do = "INSERT INTO tb_activity_log (date_time, username, supplier, account_status, menu, activity_description) VALUES ('$jam', '$_SESSION[username]', '$_SESSION[supplier]', '$_SESSION[account_status]', '$menu_do', 'Delivery History -> Search DO Number : ".$sdo_code.", DO Date From ".$tanggal_awal.", Until ".$tanggal_akhir."')";
-											$query_insert_do = mysqli_query ($insert_do);
+											$query_insert_do = mysqli_query ($conn,$insert_do);
 											?>
 												<tr>
 													<td colspan="12" align="center"> 
