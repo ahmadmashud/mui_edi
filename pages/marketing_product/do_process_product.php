@@ -220,7 +220,7 @@ if(isset($_POST['submit']))
 				
 				// INSERT to trans_delivery_order (tb_supplier_delivery_order)
 				$supplier_id = getSupplier($conn_mrp, $_SESSION["supplier"])['id'];
-				$sds_detail_id = getSdsDetailId($conn_mrp, $sds_number)['id'];
+				$sds_detail_id = getSdsDetailId($conn_mrp, $sds_number)['detail_id'];
 			
 				$query_trans_do = "INSERT INTO trans_delivery_order
 				(trans_date, description, doc_num, flag_status, flag_active, created_by, 
@@ -298,7 +298,7 @@ function getSupplier($conn_mrp, $supplier_name){
 
 function getSdsDetailId($conn_mrp, $sds_number){
 	$query = "select
-				tsds.id, tsdsd.id as detail_idd
+				tsds.id, tsdsd.id as detail_id
 			from
 				trans_supplier_delivery_schedule tsds
 			inner join trans_supplier_delivery_schedule_detail tsdsd on
