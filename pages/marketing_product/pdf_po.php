@@ -34,7 +34,7 @@ $activated1 = "UPDATE tb_purchase_order SET po_received_date='$jam' WHERE po_num
 $query3 = mysqli_query($conn,$activated1);
 
 $menu = 'Purchase Order';
-$insert = "INSERT INTO tb_activity_log (date_time, username, supplier_name, account_status, menu, activity_description) VALUES ('$jam', '$_SESSION[username]', '$_SESSION[supplier]', '$_SESSION[account_status]', '$menu', 'Download PO Number : ".$id."')";
+$insert = "INSERT INTO tb_activity_log (date_time, username, supplier, account_status, menu, activity_description) VALUES ('$jam', '$_SESSION[username]', '$_SESSION[supplier]', '$_SESSION[account_status]', '$menu', 'Download PO Number : ".$id."')";
 $query_update_po = mysqli_query($conn,$insert);
 ?>
 
