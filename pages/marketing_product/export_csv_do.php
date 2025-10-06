@@ -25,8 +25,8 @@ $jam=date('d/m/Y h:i:s');
 	die ("Error. No ID Selected! ");	
   }	
 				  
-  $select_sdo = mysql_query("SELECT * FROM tb_supplier_delivery_order_details WHERE sdo_code='$sdo_code'");
-  while($sdo=mysql_fetch_array($select_sdo)){
+  $select_sdo = mysqli_query($conn,"SELECT * FROM tb_supplier_delivery_order_details WHERE sdo_code='$sdo_code'");
+  while($sdo=mysqli_fetch_array($select_sdo)){
   ?>	
 				  
   <tr>
@@ -47,7 +47,7 @@ $jam=date('d/m/Y h:i:s');
 <?php
 $menu_do = 'Delivery Order';
 $insert_do = "INSERT INTO tb_activity_log (date_time, username, supplier, account_status, menu, activity_description) VALUES ('$jam', '$_SESSION[username]', '$_SESSION[supplier]', '$_SESSION[account_status]', '$menu_do', 'Download DO History -> DO Number : ".$sdo_code."')";
-$query_insert_do = mysql_query ($insert_do);
+$query_insert_do = mysqli_query ($conn,$insert_do);
 	
 header("Content-disposition: attachment; filename=supplierdeliveryorder.xls");
 ?>
