@@ -130,7 +130,6 @@ if(isset($_POST['submit']))
 
 			$insert_sdo_details = "INSERT INTO tb_supplier_delivery_order_details (date_entry, date_edit, modify_username, sdod_code, sdod_code_seq, sdo_code, do_number, sdo_date, sdo_time, sds_number, sdsd_number, po_number, pod_number, pr_number, prd_number, department, supplier_code, supplier_name, supplier_initials, purchase_item_type, item_code, item_group_code, item_name, spesification_code, spesification_description, item_type_category, item_type_sub_category, item_type_name, item_type_classification_status, item_type_trading_status, item_type_primary_status, item_type_checking_status, item_type_checking_result_status, item_type_bom_status, sales_category_name, inventory_unit, procurement_type, procurement_unit, conversion_value, quantity_delivery, sdo_status) VALUES('$jam', '$jam', '$_SESSION[full_name]', '$sdod_code[$i]', '$sdod_code_seq', '$sdo_code', '$do_number', '$sdo_date', '$sdo_time', '$sds_number', '$sdsd_number', '$po_number', '$pod_number', '$pr_number', '$prd_number', '$department', '$supplier_code', '$_SESSION[supplier]','$supplier_initials', '$purchase_item_type', '$item_code[$i]', '$item_group_code', '$item_name[$i]', '$spesification_code', '$spesification_description', '$item_type_category', '$item_type_sub_category', '$item_type_name', '$item_type_classification_status', '$item_type_trading_status', '$item_type_primary_status', '$item_type_checking_status', '$item_type_checking_result_status', '$item_type_bom_status', '$sales_category_name', '$inventory_unit', '$procurement_type', '$procurement_unit', '$conversion_value', '$quantity_delivery[$i]', '$sdo_status')";
 			
-			$query_insert_sdo_master = mysqli_query($conn,$insert_sdo_master);
 			$query_insert_sdo_details = mysqli_query($conn,$insert_sdo_details);		
 			
 			$update_sds = "UPDATE tb_supplier_delivery_schedule SET shipment_status='ON THE WAY' WHERE sds_number = '$sds_number' AND po_number = '$po_number'";		
@@ -147,6 +146,8 @@ if(isset($_POST['submit']))
 			$query_insert_do = mysqli_query($conn,$insert_do);
 		 }
 	  }
+	  
+			$query_insert_sdo_master = mysqli_query($conn,$insert_sdo_master);
 	  echo"<script>alert('Data has been submitted successfully.')</script>";
 	  echo"<script>javascript:history.back()</script>";	 
 	}	 
@@ -208,7 +209,6 @@ if(isset($_POST['submit']))
 
 				$insert_sdo_details = "INSERT INTO tb_supplier_delivery_order_details (date_entry, date_edit, modify_username, sdod_code, sdod_code_seq, sdo_code, do_number, sdo_date, sdo_time, sds_number, sdsd_number, po_number, pod_number, pr_number, prd_number, department, supplier_code, supplier_name, supplier_initials, purchase_item_type, item_code, item_group_code, item_name, spesification_code, spesification_description, item_type_category, item_type_sub_category, item_type_name, item_type_classification_status, item_type_trading_status, item_type_primary_status, item_type_checking_status, item_type_checking_result_status, item_type_bom_status, sales_category_name, inventory_unit, procurement_type, procurement_unit, conversion_value, quantity_delivery, sdo_status) VALUES('$jam', '$jam', '$_SESSION[full_name]', '$sdod_code[$i]', '$sdod_code_seq', '$sdo_code', '$do_number', '$sdo_date', '$sdo_time', '$sds_number', '$sdsd_number', '$po_number', '$pod_number', '$pr_number', '$prd_number', '$department', '$supplier_code', '$_SESSION[supplier]','$supplier_initials', '$purchase_item_type', '$item_code[$i]', '$item_group_code', '$item_name[$i]', '$spesification_code', '$spesification_description', '$item_type_category', '$item_type_sub_category', '$item_type_name', '$item_type_classification_status', '$item_type_trading_status', '$item_type_primary_status', '$item_type_checking_status', '$item_type_checking_result_status', '$item_type_bom_status', '$sales_category_name', '$inventory_unit', '$procurement_type', '$procurement_unit', '$conversion_value', '$quantity_delivery[$i]', '$sdo_status')";
 
-				$query_insert_sdo_master = $conn->query($insert_sdo_master);
 				$query_insert_sdo_details = $conn->query($insert_sdo_details);		
 				
 				$update_sds = "UPDATE tb_supplier_delivery_schedule SET shipment_status='ON THE WAY' WHERE sds_number = '$sds_number' AND po_number = '$po_number'";		
@@ -270,8 +270,9 @@ if(isset($_POST['submit']))
 			$insert_do = "INSERT INTO tb_activity_log (date_time, username, supplier, account_status, menu, activity_description) VALUES ('$jam', '$_SESSION[username]', '$_SESSION[supplier]', '$_SESSION[account_status]', '$menu_do', 'Entry Data -> DO No. : ".$sdo_code.", PO No. : ".$po_number.", SDS No. : ".$sds_number.", Part Name : ".$item_name[$i].", Part Code : ".$item_code[$i].", Qty. : ".$quantity_delivery[$i]."')";
 			$query_insert_do = mysqli_query($conn,$insert_do);
 		  }
-	  }
+	  } 
 	  
+		$query_insert_sdo_master = $conn->query($insert_sdo_master);
 	  echo"<script>alert('Data has been submitted successfully.')</script>";
 	  echo"<script>javascript:history.back()</script>";	
 	}
