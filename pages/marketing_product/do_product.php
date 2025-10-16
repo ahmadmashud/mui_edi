@@ -447,6 +447,7 @@ if (!file_exists($tempdir))
 												<input type="hidden" name="procurement_type" value="<?php echo $peg['procurement_type'] ?>" >
 												<input type="hidden" name="procurement_unit" value="<?php echo $peg['procurement_unit'] ?>" >
 												<input type="hidden" name="conversion_value" value="<?php echo $peg['conversion_value'] ?>" >
+												<input type="hidden" name="sds_detail_relation_id[]" value="<?php echo $peg['sds_detail_relation_id'] ?>" >
 											<?php $no++;	
 											}
 											?>

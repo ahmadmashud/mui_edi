@@ -63,6 +63,7 @@ if(isset($_POST['submit']))
   $conversion_value						= $_POST['conversion_value'];
   $department							= $_POST['department'];
   $sdo_status							= "DELIVERY";
+  $sds_detail_relation_id 				= $_POST['sds_detail_relation_id'];
 
 
   //$seq_sdod       = "SELECT sdod_code FROM tb_supplier_delivery_order_details where do_number='$_POST[do_number]'";
@@ -190,10 +191,10 @@ if(isset($_POST['submit']))
 	{
 
 	 $already_insrt_do = false;
-	$trans_do_id =  0;
+	 $trans_do_id =  0;
 	 for($i=0;$i<$data_count;$i++)
       {
-		  
+		
 		$select_sdo_details_double = mysqli_query($conn,"SELECT * FROM tb_supplier_delivery_order_details WHERE sdo_code='$sdo_code' and do_number='$do_number' and item_code='$item_code[$i]'");
 		$sdo_count_double = mysqli_num_rows($select_sdo_details_double);
 		
@@ -222,7 +223,6 @@ if(isset($_POST['submit']))
 				
 				// INSERT to trans_delivery_order (tb_supplier_delivery_order)
 				$supplier_id = getSupplier($conn_mrp, $_SESSION["supplier"])['id'];
-				$sds_detail_id = getSdsDetailId($conn_mrp, $sds_number)['detail_id'];
 				if($already_insert_do == false){
 					$query_trans_do = "INSERT INTO trans_delivery_order
 					(trans_date, description, doc_num, flag_status, flag_active, created_by, 
@@ -233,13 +233,13 @@ if(isset($_POST['submit']))
 					$trans_do_id = $conn->insert_id;
 					$already_insert_do  = true;
 				}
-				
+
 				// INSERT to trans_delivery_order (tb_supplier_delivery_order_details)
 				$query_trans_do_detail = "INSERT INTO trans_delivery_order_detail
 				(description, qty, flag_status, created_by, created_at, updated_by, updated_at,
 				generated_id, trans_do_id, sds_detail_id)VALUES(
 				'delivery from edi',$quantity_delivery[0], 1, 'edi', now(), 'edi', now(), '123', '$trans_do_id',
-				$sds_detail_id)";
+				 $sds_detail_relation_id[$i])";
 				mysqli_query($conn,$query_trans_do_detail);
 
 				// UPDATE SDS STATUS
