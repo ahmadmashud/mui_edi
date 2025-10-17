@@ -12,20 +12,6 @@ $time=date('h:i:s');
 $tempdir = "../../temp/"; 
 if (!file_exists($tempdir))
     mkdir($tempdir);
-
-//$timeout = 60; 
-//$logout_redirect_url = "../../index.php"; 
-//$timeout = $timeout * 60; 
-//if (isset($_SESSION['start_time'])) 
-//{
-//	$elapsed_time = time() - $_SESSION['start_time'];
-//	if ($elapsed_time >= $timeout) 
-//	{
-//		session_destroy();
-//		echo "<script>alert('This session has timeout!'); window.location = '$logout_redirect_url'</script>";
-//	}
-//}
-//$_SESSION['start_time'] = time();
 ?>
 
 <!DOCTYPE html>
