@@ -222,7 +222,6 @@ class DeliveryOrderProcessor
             // Insert delivery order details
             $transDoId = $this->insertDeliveryOrderDetails($formData);
             
-            // Update shipment status
             if($this->hasPartialDelivery($formData)){
                 $this->updateOutstandingQtySds($formData);
             }else{
