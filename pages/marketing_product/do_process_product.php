@@ -98,7 +98,7 @@ class DeliveryOrderProcessor
     {
         $doNumber = $formData['do_number'];
         $supplier = $_SESSION['supplier'];
-        
+         
         // Check for existing RECEIVED DO
         $selectSdo = mysqli_query($this->conn, 
             "SELECT * FROM tb_supplier_delivery_order 
