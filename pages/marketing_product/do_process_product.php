@@ -110,7 +110,7 @@ class DeliveryOrderProcessor
             $this->redirectWithAlert('DO Number already exist!');
             return false;
         }
-        
+            
         // Check for existing RETURNED DO if not a return
         if (!$formData['is_return']) {
             $selectSdoRet = mysqli_query($this->conn,
@@ -178,30 +178,27 @@ class DeliveryOrderProcessor
         $itemData = $formData['item_data'];
         
         foreach ($itemData['quantity_delivery'] as $index => $quantity) {
-            if ($quantity < $itemData['quantity_delivery_sds'][$index]) {
-                $os_sdo =  $itemData['quantity_delivery_sds'][$index] - $quantity;
                 $query = "UPDATE tb_supplier_delivery_schedule_details 
-                            SET outstanding_sdo = ?
+                            SET outstanding_sdo = outstanding_sdo - ?
                             where po_number = ? and sds_number= ? and supplier_name= ? and item_code = ?";
                  
                 $stmt = $this->conn->prepare($query);
                 $types = str_repeat('s', 5);
-                $params = $this->prepareUpdateParameterOutstandingSds($os_sdo,$formData,$itemData['item_code'][$index],$index);
+                $params = $this->prepareUpdateParameterOutstandingSds($quantity,$formData,$itemData['item_code'][$index],$index);
              
                 $stmt->bind_param($types, ...$params);
 
                 $stmt->execute();
                 $stmt->close();
-            }
         }
         
     }
 
     
-    private function prepareUpdateParameterOutstandingSds($os_sdo, $formData, $itemCode, $index)
+    private function prepareUpdateParameterOutstandingSds($quantity, $formData, $itemCode, $index)
         {
         return [ 
-                $os_sdo,
+                $quantity,
                 $formData['po_number'],
                 $formData['sds_number'], 
                 $_SESSION['supplier'],
@@ -221,12 +218,13 @@ class DeliveryOrderProcessor
             
             // Insert delivery order details
             $transDoId = $this->insertDeliveryOrderDetails($formData);
-            
-            if($this->hasPartialDelivery($formData)){
-                $this->updateOutstandingQtySds($formData);
-            }else{
+
+            if(!$this->hasPartialDelivery($formData)){
                 $this->updateShipmentStatus($formData);
             }
+            
+            $this->updateOutstandingQtySds($formData);
+            
             
             // Log activity
             $this->logActivity($formData);
